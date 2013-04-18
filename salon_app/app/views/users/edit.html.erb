@@ -1,0 +1,39 @@
+<h1>Edit Account Information</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@user) do |f| %>
+
+      <%= f.label :first_name %>
+      <%= f.text_field :first_name %>
+
+      <%= f.label :last_name %>
+      <%= f.text_field :last_name %>
+
+      <%= f.label :email %>
+      <%= f.text_field :email%>
+
+      <%= f.label 'Date of Birth'%>
+      <%= f.date_select( :dob, :start_year => 1913, :end_year => 2013 ) %>
+
+      <%= f.label :phone_number%>
+      <%= f.text_field :phone_number %>
+      
+      <%= f.label "Address 1"%>
+      <%= f.text_field :address1 %>
+      
+      <%= f.label "Address 2"%>
+      <%= f.text_field :address2 %>
+
+      
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+
+      <%= f.label :password_confirmation, "Confirmation" %>
+      <%= f.password_field :password_confirmation %>
+      
+
+      <%= f.submit class: "btn btn-large btn-primary" %>
+    <% end %>
+</div>
+</div>

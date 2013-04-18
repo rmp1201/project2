@@ -1,0 +1,111 @@
+// This is a manifest file that'll be compiled into application.js, which will include all the files
+// listed below.
+//
+// Any JavaScript/Coffee file within this directory, lib/assets/javascripts, vendor/assets/javascripts,
+// or vendor/assets/javascripts of plugins, if any, can be referenced here using a relative path.
+//
+// It's not advisable to add code directly here, but if you do, it'll appear at the bottom of the
+// the compiled file.
+//
+// WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
+// GO AFTER THE REQUIRES BELOW.
+//
+//= require jquery
+//= require jquery_ujs
+//= require bootstrap
+//= require_tree .
+
+
+var time=0.0;
+var beaID;
+var date=new Date();
+
+function increasetime(service){
+	object = document.getElementById(service.id);
+	if (service.checked){
+		time = time + parseFloat(service.getAttribute("data-time"));
+	}
+	else{
+		time = time - parseFloat(service.getAttribute("data-time"));
+	}	
+	//alert(time);
+};
+
+function updateID(beauticianID){
+	beaID = beauticianID.value;
+}
+
+
+function dateChanged(object){
+	
+
+	// Year changed
+	if(object.id == "appointment_date_1i")
+	{
+		date.setFullYear(object.value);
+	}
+	//Month changed
+	else if(object.id == "appointment_date_2i")
+	{
+		date.setMonth(object.value);
+	}
+	//Day changed
+	else if(object.id == "appointment_date_3i")
+	{
+		date.setDate(object.value);		
+	}
+
+
+	
+
+	
+	var day =date.getDay();
+	if(day == 1 || day == 0)
+	{
+		object = document.getElementById("beauticians");
+		object.style.display='none';
+		object = document.getElementById("closedMessage");
+		object.style.display='block';
+
+	}
+	else if(day==2 || day == 4){
+		object = document.getElementById("beauticians");
+		if(object.style.display =='none'){
+			object.style.display='block';
+		}
+
+		object = document.getElementById("closedMessage");
+		if(object.style.display =='block'){
+			object.style.display='none';
+		}
+		createSchedule(8,19);
+
+	}
+	else{
+		object = document.getElementById("beauticians");
+		if(object.style.display =='none'){
+			object.style.display='block';
+		}
+
+		object = document.getElementById("closedMessage");
+		if(object.style.display =='block'){
+			object.style.display='none';
+		}
+		createSchedule(9,17);
+	}
+};
+	
+
+
+	function enoughtime(timeslot){
+			for(var i=0.0; i<time; i+=0.5)
+			{
+				if(document.getElementById(""+(timeslot+i)).style.background == "none repeat scroll 0% 0% rgb(85, 85, 85)")
+				{
+					return false;
+				}
+			}
+			return true;
+	};
+
+

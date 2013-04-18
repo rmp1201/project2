@@ -1,0 +1,116 @@
+<% if !signed_in? || (!current_user.admin && (current_user.id != @user.id) ) %>
+    <script type="text/javascript">
+    window.location.href="/"  // put your correct path in a string here
+  </script>
+  <%end %>
+<% provide(:title, @user.first_name+" "+@user.last_name) %>
+
+    <table cellpadding="10">
+      	<tr>
+      		<td>
+      		<h1>	
+        	Welcome back!     
+    		</h1> <br />
+    		Account information:
+    		<table >
+    			<tr> 
+    				<td> Name: </td>
+    				<td>
+    					<%= @user.first_name+" "+ @user.last_name%>
+    				</td>
+    			</tr>
+    			<tr>
+    				<td> Email: </td>
+    				<td> <%= @user.email %> </td>
+    			</tr>
+    			<tr>
+    				<td> Address: </td>
+    				<td> <%= @user.address1 %> </td>
+    			</tr>
+    			<tr>
+    				<td />
+    				<td> <%= @user.address2 %> </td>
+    			</tr>
+    			<tr> <td/><td/> </tr>
+    			<tr> <td/><td/> </tr>
+    			<tr>
+    				<td> Date of Birth </td>
+    				<td> <%= @user.dob %> </td>
+    			</tr>
+    			<tr>
+    				<td> <%= link_to 'Edit Information', edit_user_path(@user), class: "btn btn-small btn-primary"  %> </td>
+    				<td> <%= link_to 'Change Password', '#', class: "btn btn-small btn-primary"  %>
+    				</td>
+    			</tr>
+    		</table>
+    	</td>
+        <td>
+            <table id="lastAppoint" cellpadding="5">
+                <tr>
+                    <th>
+                        Last Appointment
+                    </th>
+                </tr>
+                <% appoint = Appointment.where("date < ? AND userID == ?", Date.today, @user.id).last %>
+                <tr>
+                    <td>
+                        <%= "Was: "+appoint.date.to_s+" at "+format_time(appoint.timeslot) %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <%= "With: "+User.find(appoint.beauticianID).first_name %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <%= "You got:" %>
+                        <br />
+                        <% Service.find(:all , :joins => :appointments, :conditions => "appointment_id = #{appoint.id}").each do |serv| %>
+                            <%= serv.name+",  " %>
+                        <%end %>
+                    </td>
+                </tr>
+            </table>
+        </td>       
+        </tr>
+        <tr>
+            <table id="lastAppoint" cellpadding="5">
+                <tr>
+                    <th>
+                        Your Next Appointment
+                    </th>
+                </tr>
+                <% appoint = Appointment.where("date > ? AND userID == ?", Date.today, @user.id).first %>
+
+                <% if appoint != nil %>
+                <tr>
+                    <td>
+                        <%= "On: "+appoint.date.to_s+" at "+format_time(appoint.timeslot) %>
+                    </td>
+                
+                
+                    <td>
+                        <%= "With: "+User.find(appoint.beauticianID).first_name %>
+                    </td>
+                    <td>
+                        <%= "Services:" %>
+                        <br />
+                        <% Service.find(:all , :joins => :appointments, :conditions => "appointment_id = #{appoint.id}").each do |serv| %>
+                            <%= serv.name+",  " %>
+                        <%end %>
+                    </td>
+                </tr>
+                <% else %>
+                <tr>
+                    <td>
+                        You dont have another appointment made yet.
+                    </td>
+                </tr>
+                <%end%>
+
+            </table>
+
+
+        </tr>
+	</table>

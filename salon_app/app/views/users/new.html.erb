@@ -1,0 +1,38 @@
+<% provide(:title, 'Sign up') %>
+<h1>Sign up</h1>
+
+<div class="row">
+  <div class="span6 offset3">
+    <%= form_for(@user) do |f| %>
+
+      <%= f.label :first_name %>
+      <%= f.text_field :first_name %>
+
+      <%= f.label :last_name %>
+      <%= f.text_field :last_name %>
+
+      <%= f.label :email %>
+      <%= f.text_field :email %>
+
+      <% if current_user && current_user.admin %>
+      <table width="100">
+        <tr>
+        <td><%= f.label :admin %> </td> <td><%= f.check_box :admin %> <td>
+      </tr>
+      <tr>
+        <td><%= f.label :employee %> </td> <td><%= f.check_box :employee %></td>
+      </tr>
+      </table>
+
+      <%end %>
+
+      <%= f.label :password %>
+      <%= f.password_field :password %>
+
+      <%= f.label :password_confirmation, "Confirmation" %>
+      <%= f.password_field :password_confirmation %>
+
+      <%= f.submit "Create my account", class: "btn btn-large btn-primary" %>
+    <% end %>
+  </div>
+</div>

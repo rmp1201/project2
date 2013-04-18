@@ -1,0 +1,153 @@
+<%= javascript_tag do %>
+
+	var beaID;
+	var date=new Date();
+
+
+	function formSubmit(timeSlot){
+		if(!enoughtime(timeSlot)){
+			return false;
+		}
+		form = document.getElementById("new_appointment");
+
+		object = document.createElement("input");
+		object.name = "appointment[timeframe]";
+		object.type= "text";
+		object.style.display ="none";
+		object.value = time;
+		form.appendChild(object);
+
+		object = document.createElement("input");
+		object.name = "appointment[timeslot]";
+		object.type= "text";
+		object.style.display ="none";
+		object.value = timeSlot;
+		form.appendChild(object);
+
+		form.submit();	
+			
+};
+
+	
+	function closeTimeSlots(){
+
+		//Problem Area!
+		// <%=:date %>
+		<% Appointment.where("date == ? AND beauticianID == ?", Date.today, 1).each do |appoint| %>
+
+		//
+
+		<% startTime = appoint.timeslot %>
+		<% i = appoint.timeframe %>
+			<% while  i>0 do %>
+				obj = document.getElementById(<%=startTime%>);
+				obj.onmouseover= {};
+				obj.onclick= {};
+				obj.onmouseout= {};
+				obj.style.background= "#555";
+				<% startTime += 0.5 %>
+				<% i-=0.5 %>
+			<%end%>	
+		<%end%>
+
+
+};
+
+
+
+	function createSchedule(start,end){
+	object = document.getElementById("schedule");
+
+			str="";
+				for( ; start<end ; start+=.5){
+					if(start%1 ==0){
+						str += "<tr><td id=\""+start+"\" onmouseover=\"style.background='#ddf';\" onmouseout=\"style.background='#fff';\" onclick=\"formSubmit("+start+")\" > ";
+						if (start == 12)
+						str+= (start)+":00";
+					else	
+						str+= (start%12)+":00";
+					str+= "  </td>\n";
+					}
+					else{
+						str+= "<td id=\""+start+"\" onmouseover=\"style.background='#ddf';\" onmouseout=\"style.background='#fff';\"  onclick=\"formSubmit("+start+")\" > ";
+					if (start == 12.5)
+						str+= (start-.5)+":30";
+					else
+						str+= (start%12-.5)+":30";
+					str += "</td></tr>\n"
+					}
+
+				}
+			object.innerHTML=str;
+
+			closeTimeSlots();
+			};
+
+		
+<% end %>
+<% provide(:title , 'Make an Appointment') %>
+<% if signed_in? %>
+<% show = false %>
+
+<h1>Make an Appointment!</h1>
+
+
+<%= form_for(@appointment) do |f| %>
+<table cellpadding="10">
+	<%=f.hidden_field(:userID , :value => current_user.id )%>
+<tr>
+	<td>
+		
+		Services
+		<br/>
+		<table padding="10">
+		<% for serv in Service.find(:all)%>
+			<tr>
+			<td>
+				<%= check_box_tag "appointment[service_ids][]", serv.id, false , {data: {time: serv.timeframe}, "onclick" => 'increasetime(this);', id: "service#{serv.id}" } %> </td>	
+
+			<td><%= serv.name %> </td>
+			</tr>
+		<% end %>
+		</table>
+	</td>
+	<td valign="top">
+		Select a Beautician<br />
+		<div id="closedMessage" style="display:none; color: red">
+			Sorry the shop is closed on this day.<br/> Please choose another day.
+		</div>
+		<div id="beauticians">
+			<% User.all.each do |user| %>
+			<% if user.employee %>
+				<%= f.radio_button(:beauticianID, user.id, {"onclick" => "updateID(this)"}) %> 
+				<%= user.first_name+" "+user.last_name %>
+				<br/>
+			<%end%>
+			<%end%>
+		</div>
+		<br/>
+		<br/>
+		Select a date<br/>
+		<%= f.date_select(:date ,{:start_date => :today, :start_year =>2013}, {"onchange"=> 'dateChanged(this)'}) %>
+
+	</td>	
+	<td>
+		<table id="schedule" border="3" cellpadding="5" align="center">
+			
+		</table>
+	</td>
+</tr>
+
+</table>
+<%= f.submit "Make Appointment", class: "btn btn-large btn-primary" %>
+<% end %>
+<% if current_user && (current_user.employee || current_user.admin ) %>
+	Make appointmet for another user!
+<% end %>
+<% else %>
+	<script type="text/javascript">
+    window.location.href="/"  // put your correct path in a string here
+  </script>
+
+<%end%>
+
