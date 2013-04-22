@@ -1,4 +1,14 @@
 class AppointmentsController < ApplicationController
+
+  def index
+    @appointments = Appointment.where("date >= ?", Date.today)
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @users }
+    end
+  end
+
   def new
   	@appointment = Appointment.new
 
@@ -14,9 +24,8 @@ class AppointmentsController < ApplicationController
   	@appointment = Appointment.new(params[:appointment])
     if @appointment.save
       flash[:alert] = "Appointment has been made!"
-      redirect_to user_path(@appointment.userID)
+      redirect_to user_path(current_user.id)
     else
-      flash[:alert] = @appointment.beauticianID
       render 'new'
     end
   end
@@ -27,8 +36,23 @@ class AppointmentsController < ApplicationController
   def delete
   end
 
-  def getAppoitnments
-      Appointment.where("date == ? AND beauticianID == ?", params[:date], params[:beaID])
+  def table
+    if  params[:date] && params[:date] != "undefined" 
+      @date = Date.parse params[:date]
+    end
+    if params[:beaID] && params[:beaID] != "undefined" 
+      @beaID = params[:beaID]
+    end
+    
+    
+    render :partial => 'appointments/table'
+
   end
+
+  def destroy
+      Appointment.find(params[:id]).destroy
+      redirect_to user_path
+  end
+
 
 end

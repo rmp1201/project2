@@ -7,9 +7,10 @@ SalonApp::Application.routes.draw do
   get "service/edit"
 
   get "service/delete"
+  get "appointments/table"
 
   resources :services
-  resources :appointments, only: [:new, :create, :edit, :delete]
+  resources :appointments, only: [:new, :create, :index, :delete]
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
 

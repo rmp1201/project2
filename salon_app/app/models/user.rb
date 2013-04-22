@@ -32,6 +32,10 @@ class User < ActiveRecord::Base
 
   private
 
+    def name
+        "#{first_name} #{last_name}"    
+    end  
+
     def create_remember_token
       self.remember_token = SecureRandom.urlsafe_base64
     end

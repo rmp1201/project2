@@ -39,8 +39,6 @@
     			</tr>
     			<tr>
     				<td> <%= link_to 'Edit Information', edit_user_path(@user), class: "btn btn-small btn-primary"  %> </td>
-    				<td> <%= link_to 'Change Password', '#', class: "btn btn-small btn-primary"  %>
-    				</td>
     			</tr>
     		</table>
     	</td>
@@ -52,6 +50,7 @@
                     </th>
                 </tr>
                 <% appoint = Appointment.where("date < ? AND userID == ?", Date.today, @user.id).last %>
+                    <% if appoint != nil %>
                 <tr>
                     <td>
                         <%= "Was: "+appoint.date.to_s+" at "+format_time(appoint.timeslot) %>
@@ -71,6 +70,7 @@
                         <%end %>
                     </td>
                 </tr>
+                <% end %>
             </table>
         </td>       
         </tr>

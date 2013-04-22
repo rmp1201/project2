@@ -1,0 +1,16 @@
+<% if  ( !signed_in? || !current_user.admin) %>
+	<script type="text/javascript">
+    window.location.href="/"  // put your correct path in a string here
+  </script>
+<% end %>  
+
+<ol>
+<% @appointments.each do |appoint| %>
+	<% user= User.find(appoint.userID) %>
+	<li> <%= user.first_name+" "+user.last_name+" "+appoint.date.to_s %> </li>
+    <%= link_to 'Show', appoint %>
+    <%= link_to 'Edit', edit_appointment_path(user) %>
+    <%= link_to 'Destroy', appoint, method: :delete, data: { confirm: 'Are you sure?' } %>
+    <br />
+<% end %>
+</ol>

@@ -33,8 +33,38 @@ function increasetime(service){
 
 function updateID(beauticianID){
 	beaID = beauticianID.value;
+	$('#partial').load('appointments/table', 'date=' + date + '&beaID=' + beaID  , function(){
+		setDay()} );
 }
 
+
+function showMessage(divName){
+	if(divName == 0)
+	{
+		object = document.getElementById("beauticians");
+		object.style.display='block';
+		for(var i=1; i<4; i++){
+			object = document.getElementById("message"+i);
+			object.style.display='none';
+		}
+	}
+	else{
+		object = document.getElementById("beauticians");
+		object.style.display='none';
+		for(var i=1; i<4; i++){
+			if (i == divName){
+				object = document.getElementById("message"+i);
+				object.style.display='block';
+			}
+			else{
+				object = document.getElementById("message"+i);
+				object.style.display='none';
+			}
+		}
+	}
+
+
+}
 
 function dateChanged(object){
 	
@@ -56,51 +86,40 @@ function dateChanged(object){
 	}
 
 
+	if( date < new Date()){
+		showMessage(2);
+		return false;
+	}
+
+//	$.ajax({
+//		type: "POST",
+// 		url: "appointments/",
+// 		data: 'date=' + date + '&beaID=' + beaID + "'"
+// 	});
+
+
+	$('#partial').load('appointments/table', 'date=' + date + '&beaID=' + beaID  , function(){
+		setDay()} );
 	
-
 	
-	var day =date.getDay();
-	if(day == 1 || day == 0)
-	{
-		object = document.getElementById("beauticians");
-		object.style.display='none';
-		object = document.getElementById("closedMessage");
-		object.style.display='block';
-
-	}
-	else if(day==2 || day == 4){
-		object = document.getElementById("beauticians");
-		if(object.style.display =='none'){
-			object.style.display='block';
-		}
-
-		object = document.getElementById("closedMessage");
-		if(object.style.display =='block'){
-			object.style.display='none';
-		}
-		createSchedule(8,19);
-
-	}
-	else{
-		object = document.getElementById("beauticians");
-		if(object.style.display =='none'){
-			object.style.display='block';
-		}
-
-		object = document.getElementById("closedMessage");
-		if(object.style.display =='block'){
-			object.style.display='none';
-		}
-		createSchedule(9,17);
-	}
 };
 	
 
 
 	function enoughtime(timeslot){
-			for(var i=0.0; i<time; i+=0.5)
+			for(var i=0.0; i<=(time/2.0); i+=0.5)
 			{
-				if(document.getElementById(""+(timeslot+i)).style.background == "none repeat scroll 0% 0% rgb(85, 85, 85)")
+				var total = timeslot+i;
+				cell = document.getElementById(""+total); 
+			    //	alert("Cell: "+cell+" i= "+i+" time = "+time/2);
+				if (cell == null && i == time/2.0)
+				{
+					return true;
+				}
+				else if(cell == null){
+					return false;
+				}
+				if(cell.style.background == "none repeat scroll 0% 0% rgb(85, 85, 85)")
 				{
 					return false;
 				}
@@ -109,3 +128,29 @@ function dateChanged(object){
 	};
 
 
+function formSubmit(timeSlot){
+		if(!enoughtime(timeSlot)){
+			return false;
+		}
+		form = document.getElementById("new_appointment");
+
+		object = document.createElement("input");
+		object.name = "appointment[timeframe]";
+		object.type= "text";
+		object.style.display ="none";
+		object.value = Math.ceil(time);
+		form.appendChild(object);
+
+		object = document.createElement("input");
+		object.name = "appointment[timeslot]";
+		object.type= "text";
+		object.style.display ="none";
+		object.value = timeSlot;
+		form.appendChild(object);
+
+		form.submit();	
+			
+};
+
+
+	
