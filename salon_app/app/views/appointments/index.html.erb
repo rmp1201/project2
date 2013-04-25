@@ -9,7 +9,6 @@
 	<% user= User.find(appoint.userID) %>
 	<li> <%= user.first_name+" "+user.last_name+" "+appoint.date.to_s %> </li>
     <%= link_to 'Show', appoint %>
-    <%= link_to 'Edit', edit_appointment_path(user) %>
     <%= link_to 'Destroy', appoint, method: :delete, data: { confirm: 'Are you sure?' } %>
     <br />
 <% end %>

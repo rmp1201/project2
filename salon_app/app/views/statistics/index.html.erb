@@ -1,0 +1,64 @@
+<div class="center">
+<h1>Listing statistics</h1>
+<br />
+<% if @statistic != nil %>
+
+  This statistic is up to date as of <%= @statistic.created_at.to_formatted_s(:long_ordinal) %>
+
+
+  <table class="table table-bordered">
+    <tr>
+      <th> <h3> Rebook % </h3> </th>
+      <th> <h3> Lost Clients </h3> </th>
+    </tr>
+    <tr>
+      <td  class="stat-percent"><strong > <%= @statistic.rebooks %>% </strong> </td>
+      <td>
+          <% i =0 %> 
+          <% User.where("admin = ? AND employee = ?", false, false).each do |user|   %>
+            <% lastAppo = Appointment.where("userID = ?", user.id).last %>
+            <% if lastAppo == nil || lastAppo.date < Date.today.months_ago(2) %>
+              <%= user.first_name+" "+user.last_name %> <br /> 
+              <% i+= 1 %>
+            <% end %>
+          <% end %> 
+            There are <%= i %> clients who haven't made an appointment in 2 months. <br />
+           <% if i != @statistic.lost %>
+            This statistic  id out of date for this date please delete it.
+            <%= link_to 'Destroy', @statistic, method: :delete, data: { confirm: 'Are you sure?' } , class: "btn btn-mini"%>
+           <%end %>
+      </td>
+    </tr>
+  </table>
+  
+<% end %>
+</div>
+
+<br />
+    <table class="table center">
+      <tr>
+        <th>Date</th>
+        <th>Rebook %</th>
+        <th># Lost</th>
+        <th>Delete</th>
+      </tr>
+      <% i =0 %>
+      <% @statistics.each do |stat| %>
+      <tr>
+        <td>
+          <%= stat.created_at.to_date.yesterday %>
+        </td>
+        <td>
+          <%= stat.rebooks %>
+        </td>
+        <td>
+          <%= stat.lost %>
+        </td>
+        <td>
+          <%= link_to 'Destroy', stat, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      </tr> 
+      <% i+=1%>
+      <% end %>
+    </table>
+

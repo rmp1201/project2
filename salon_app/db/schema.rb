@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130327231411) do
+ActiveRecord::Schema.define(:version => 20130423165819) do
 
   create_table "appointments", :force => true do |t|
     t.integer  "userID"
@@ -19,6 +19,8 @@ ActiveRecord::Schema.define(:version => 20130327231411) do
     t.integer  "beauticianID"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.float    "timeslot"
+    t.integer  "timeframe"
   end
 
   create_table "appointments_services", :force => true do |t|
@@ -31,6 +33,7 @@ ActiveRecord::Schema.define(:version => 20130327231411) do
     t.float    "price"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.float    "timeframe"
   end
 
   create_table "services_to_appointments", :force => true do |t|
@@ -38,6 +41,13 @@ ActiveRecord::Schema.define(:version => 20130327231411) do
     t.integer  "serviceID"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+  end
+
+  create_table "statistics", :force => true do |t|
+    t.float    "rebooks"
+    t.integer  "lost"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "users", :force => true do |t|

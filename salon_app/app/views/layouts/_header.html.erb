@@ -12,7 +12,7 @@
             <li><%= link_to "Schedule", schedule_path %></li>
             <%end%>
             <% if current_user.admin %>
-            <li><%= link_to "Stats", '#' %></li>
+            <li><%= link_to "Stats", statistics_path %></li>
             <li><%= link_to "Users", '/users' %></li>
             <% end %>
             <li id="fat-menu" class="dropdown">

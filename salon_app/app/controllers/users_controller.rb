@@ -26,6 +26,7 @@ class UsersController < ApplicationController
     if @user.save
       flash[:alert] = "Welcome to the Sample App!"
       sign_in @user
+      WelcomeMailer.welcome_email(@user).deliver
       redirect_to @user
     else
       render 'new'

@@ -1,5 +1,8 @@
 SalonApp::Application.routes.draw do
 
+  resources :statistics
+
+
   get "service/new"
 
   get "service/create"

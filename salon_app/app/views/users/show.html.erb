@@ -8,10 +8,8 @@
     <table cellpadding="10">
       	<tr>
       		<td>
-      		<h1>	
-        	Welcome back!     
-    		</h1> <br />
-    		Account information:
+      		    <h1>	Welcome back!     </h1> <br />
+    		      Account information:
     		<table >
     			<tr> 
     				<td> Name: </td>
@@ -28,11 +26,8 @@
     				<td> <%= @user.address1 %> </td>
     			</tr>
     			<tr>
-    				<td />
     				<td> <%= @user.address2 %> </td>
     			</tr>
-    			<tr> <td/><td/> </tr>
-    			<tr> <td/><td/> </tr>
     			<tr>
     				<td> Date of Birth </td>
     				<td> <%= @user.dob %> </td>
@@ -41,9 +36,9 @@
     				<td> <%= link_to 'Edit Information', edit_user_path(@user), class: "btn btn-small btn-primary"  %> </td>
     			</tr>
     		</table>
-    	</td>
-        <td>
-            <table id="lastAppoint" cellpadding="5">
+    	    </td>
+            <td>
+            <table>
                 <tr>
                     <th>
                         Last Appointment
@@ -72,10 +67,11 @@
                 </tr>
                 <% end %>
             </table>
-        </td>       
+            </td>       
         </tr>
         <tr>
-            <table id="lastAppoint" cellpadding="5">
+            <td>
+            <table>
                 <tr>
                     <th>
                         Your Next Appointment
@@ -110,7 +106,7 @@
                 <%end%>
 
             </table>
-
+        </td>
 
         </tr>
 	</table>

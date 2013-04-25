@@ -34,6 +34,8 @@ class AppointmentsController < ApplicationController
   end
 
   def delete
+      Appointment.find(params[:id]).destroy
+      redirect_to appoinment_path
   end
 
   def table
@@ -42,17 +44,12 @@ class AppointmentsController < ApplicationController
     end
     if params[:beaID] && params[:beaID] != "undefined" 
       @beaID = params[:beaID]
-    end
-    
-    
+    end 
     render :partial => 'appointments/table'
 
   end
 
-  def destroy
-      Appointment.find(params[:id]).destroy
-      redirect_to user_path
-  end
+  
 
 
 end

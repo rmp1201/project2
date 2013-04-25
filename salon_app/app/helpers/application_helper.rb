@@ -27,8 +27,12 @@ module ApplicationHelper
       if time%1 ==0
         output= (time%12).to_i.to_s+":00pm"
       else 
-        time = (time-0.5)
-        output = (time%12).to_i.to_s+":30pm"
+        if time != 12.5
+          time = (time-0.5)
+          output = (time%12).to_i.to_s+":30pm"
+        else
+          output = (time-0.5).to_i.to_s+":30pm"
+        end
       end
     end
   end

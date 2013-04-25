@@ -7,17 +7,34 @@
 
 <% if signed_in? && current_user.employee %>
 <h1><%= current_user.first_name %>'s Schedule </h1>
-	<% Appointment.where("date == ? AND beauticianID == ?", Date.today, current_user.id).each do |appoint| %>
-		<% @user = User.find(appoint.userID) %>
-		<%= %> 
-		<br/>
-		<%= format_time(appoint.timeslot)+"-"+format_time(appoint.timeslot+(appoint.timeframe+1)*0.5) %>
-		<%= @user.first_name+" "+@user.last_name %>
-		<br/>
-		<% Service.find(:all , :joins => :appointments, :conditions => "appointment_id = #{appoint.id}").each do |serv| %>
-		<%= serv.name+",  " %>
-		<%end %>
+
+<table class="table">
+	<thead>
+		<th>Time</th>
+		<th>Client</th>
+		<th>Services</th>
+	</thead>
+	<tbody>
+		<% Appointment.where("date == ? AND beauticianID == ?", Date.today, current_user.id).sort{ |hsh| hsh[:timeslot]}.each do |appoint| %>
+		<tr>
+			<td><%= format_time(appoint.timeslot)+"-"+format_time(appoint.timeslot+(appoint.timeframe+1)*0.5) %></td>
+			<% @user = User.find(appoint.userID) %>
+			<td><%= @user.first_name+" "+@user.last_name %> </td>
+			<% services = Service.find(:all , :joins => :appointments, :conditions => "appointment_id = #{appoint.id}") %>
+			<td>
+			<% services.each do |serv| %>
+				<%	if serv != services.last %>
+					<%= serv.name+",  " %>
+				<% else %>
+					<%= serv.name+".  " %>
+				<% end %>
+			<%end %>
+			</td>
+		</tr>
 		<%end%>
+	</tbody>
+
+</table>		
 
 <%end%>
 
@@ -26,12 +43,12 @@
 
 <% if signed_in? && current_user.admin%>
 <h1>Today's Schedule </h1>
-<table cellpadding="10">
+<table class="table table-bordered" >
 	<tr>
 	<% User.where("employee == ?", true).each do |employee| %>
 	<td>
 	<h2><%= employee.first_name+" "+employee.last_name %> </h2>
-	<% Appointment.where("date == ? AND beauticianID == ?", Date.today, employee.id).each do |appoint| %>
+	<% Appointment.where("date == ? AND beauticianID == ?", Date.today, employee.id).sort{ |hsh| hsh[:timeslot]}.each do |appoint| %>
 		<% @user = User.find(appoint.userID) %> 
 		<%= format_time(appoint.timeslot) %>
 		<%= @user.first_name+" "+@user.last_name %><br/>

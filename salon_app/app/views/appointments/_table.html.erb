@@ -53,8 +53,6 @@ function createSchedule(start,end){
 
 	function closeTimeSlots(){
 
-		//Problem Area!
-		// 
 		<% Appointment.where("date == ? AND beauticianID == ?", date, beaID).each do |appoint| %>
 
 		<% startTime = appoint.timeslot %>
